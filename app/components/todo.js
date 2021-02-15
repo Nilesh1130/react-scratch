@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-export const Title = () => {
+export const Title = ({title}) => {
   return (
     <div>
        <div>
-          <h1>to-do</h1>
+          <h1>{title}</h1>
        </div>
     </div>
   );

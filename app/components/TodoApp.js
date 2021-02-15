@@ -11,6 +11,12 @@ class TodoApp extends React.Component{
       data: []
     }
   }
+
+  componentDidMount = () => {
+    var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    var data = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
+    this.state = {data}
+  }
   // Add todo handler
   addTodo = (val) => {
     // Assemble data
@@ -19,7 +25,12 @@ class TodoApp extends React.Component{
     var { data } = this.state;
     data.push(todo);
     // Update state
-    this.setState({data});
+    this.setState({data}, () => {
+      var tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+      tasks[this.props.cacheList] = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
+      tasks[this.props.cacheList].push(todo);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    });
   }
   // Handle remove
   handleRemove = (id) => {
@@ -35,11 +46,11 @@ class TodoApp extends React.Component{
     // Render JSX
     return (
       <div>
-        <Title />
-        <TodoForm addTodo={this.addTodo.bind(this)}/>
+        <Title title={this.props.title}/>
+        <TodoForm addTodo={this.addTodo}/>
         <TodoList
           todos={this.state.data}
-          remove={this.handleRemove.bind(this)}
+          remove={this.handleRemove}
         />
       </div>
     );
