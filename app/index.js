@@ -41,7 +41,7 @@ class App extends React.Component{
                 <Route path="/medium">
                   <TodoApp title={'Medium Priority'} cacheList={'medium'}/>
                 </Route>
-                <Route path="/high">
+                <Route exact path="/high">
                   <TodoApp title={'High Priority'} cacheList={'high'}/>
                 </Route>
                 <Redirect from="/" to="/high" />

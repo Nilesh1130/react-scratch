@@ -13,9 +13,6 @@ class TodoApp extends React.Component{
   }
 
   componentDidMount = () => {
-    var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    var data = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
-    this.state = {data}
   }
   // Add todo handler
   addTodo = (val) => {
@@ -25,25 +22,27 @@ class TodoApp extends React.Component{
     var { data } = this.state;
     data.push(todo);
     // Update state
-    this.setState({data}, () => {
-      var tasks = JSON.parse(localStorage.getItem("tasks")) || {};
-      tasks[this.props.cacheList] = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
-      tasks[this.props.cacheList].push(todo);
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    });
+    var tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+    tasks[this.props.cacheList] = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
+    tasks[this.props.cacheList].push(todo);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    this.forceUpdate()
   }
   // Handle remove
   handleRemove = (id) => {
-    // Filter all todos except the one to be removed
-    const remainder = this.state.data.filter((todo) => {
-      if(todo.id !== id) return todo;
-    });
-    // Update state with filter
-    this.setState({data: remainder});
+    console.log('id',id)
+    let tasks = JSON.parse(localStorage.getItem("tasks"))
+    const index = tasks[this.props.cacheList].findIndex(x => x.id == id)
+    tasks[this.props.cacheList].splice(index,1)
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    this.forceUpdate()
   }
 
   render(){
     // Render JSX
+    var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    var data = tasks[this.props.cacheList] ? tasks[this.props.cacheList] : [];
+    this.state = {data}
     return (
       <div>
         <Title title={this.props.title}/>
